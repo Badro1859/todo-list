@@ -1,0 +1,19 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light nav d-flex">
+    
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+    </button>
+    
+    <div class="navbar-search align-self-end ml-4">
+        
+      
+      <div class="input-group">
+          <input id="search_input" type="text" name="search-area" value="{{search_input}}" class="form-control search-menu" placeholder="Search...">
+          <button type="submit" class="btn search-btn search" value="other">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </button> 
+      </div>
+      
+    </div>
+  </nav>

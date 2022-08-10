@@ -1,0 +1,21 @@
+
+
+<div class="modal-header text-center">
+    <h5 class="modal-title w-100 font-weight-bold" id="exampleModalLabel">Completed task</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+
+<div class="modal-body mx-3 mt-3">
+  <div class="row mb-3">
+    {% if object.complete %}
+    <p> successufly completed the {{object}} !!</p>
+    {% else %}
+    <p> {{object}} return to incomplete task list !!</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary js-reload-list" data-dismiss="modal">OK</button>
+</div>
+</form>

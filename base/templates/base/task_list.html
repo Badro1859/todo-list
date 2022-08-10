@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<main class="page-content">
+    {% include 'partials/navbar.html' %}
+
+  <div class="container-fluid pt-5 mt-2">
+
+    <div id="display-area"  class="container-fluid mt-3 py-3 task-wrapper">
+     <!-- display task from task_list file -->
+    
+     {% include 'base/partials/task_list_partial.html' %}
+    </div>
+
+    <footer class="text-center mt-3">
+      <div class="mb-2">
+        <small>
+            © 2022 made with <i class="fa fa-heart" style="color:red"></i> by - <a target="_blank" rel="noopener noreferrer" href="https://azouaoui.netlify.com">
+            Madani Mahmoud Bader Eddine
+            </a>
+        </small>
+      </div>
+      <div>
+        <a href="https://github.com/azouaoui-med" target="_blank">
+            <img alt="GitHub followers" src="https://img.shields.io/github/followers/azouaoui-med?label=github&style=social" />
+        </a>
+      </div>
+    </footer>
+  </div>
+</main>
+
+{% endblock content %}

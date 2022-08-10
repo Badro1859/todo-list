@@ -1,0 +1,74 @@
+
+{% load custom_tag %}
+
+<!-- Modal for create new task -->
+
+<div class="modal-header text-center">
+    <h5 class="modal-title w-100 font-weight-bold" id="exampleModalLabel">Create new task</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+
+<form method="POST" action="{% if not object %}{% get_url 'create' %}{% else %}{% get_url 'update' object %}{% endif %}">
+{% csrf_token %}
+<div class="modal-body mx-3 mt-3">
+  <div class="row mb-3">
+    <label for="titleLabel" class="col-sm-2 col-form-label">Title</label>
+    <div class="col-sm-10">
+      <input type="text" name="title" value="{{ object.title }}" class="form-control" id="titleLabel" placeholder="task title" required>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="descriptionLabel" class="col-sm-2 col-form-label">Description</label>
+    <div class="col-sm-10">
+      <textarea type="textarea" name="description" class="form-control" id="descriptionLabel" placeholder="task description ...">{{ object.description }}</textarea>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="dateLabel" class="col-sm-2 col-form-label">Date</label>
+    <div class="col-sm-4">
+        <input type="date" name="date" value="{{ object.date }}" class="form-control" id="dateLabel">
+        <script>
+          if (document.getElementById('dateLabel').value == ""){
+            document.getElementById('dateLabel').value = new Date().toISOString().slice(0, 10);
+          }
+        </script>
+    </div>
+    
+    <div class="col-sm-6 d-flex align-items-center justify-content-end">
+        {% if object.primary  %}
+        <input type="checkbox" name="primary" id="checkLabel" checked>
+        {% else %}
+        <input type="checkbox" name="primary" id="checkLabel">
+        {% endif %}
+        
+        <label for="checkLabel" class="col-form-label mx-2">Primary</label>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="selectLabel" class="col-sm-2 col-form-label">Category</label>
+    <div class="col-10 d-flex align-items-center">
+        <select name="category" id="selectLabel" class="form-select" >
+          
+          {% if not object.category %}
+          <option selected value="">...</option>
+          {% else %}
+          <option value="">...</option>
+          <option selected value="{{object.category.id}}">{{ object.category.name }}</option>
+          {% endif %}
+          
+          {% for category in categories %}
+          <option value="{{category.id}}" >{{ category.name }}</option>
+          {% endfor %}
+        </select>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+</div>
+</form>
+     
+ 
+

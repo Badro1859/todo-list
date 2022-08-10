@@ -1,0 +1,93 @@
+{% load static %}
+
+<nav id="sidebar" class="sidebar-wrapper">
+    <!-- sidebar-content  -->
+    <div class="sidebar-content">
+      <!-- sidebar-header  -->
+      <div class="sidebar-brand d-flex justify-content-center ">
+        <h3>TO-DO LIST</h3>
+      </div>
+      <div class="sidebar-header">
+        <div class="user-pic">
+          <img class="img-responsive img-rounded" src="{% static 'img/avatar.png' %}"
+          alt="User picture">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ request.user.user_name }}
+          <strong>{{ request.user.first_name }}</strong>
+          </span>
+          <span class="user-role">User</span>
+        </div>
+      </div>
+      <!-- END sidebar-header  -->
+      
+      <!-- sidebar-menu  -->
+      <div class="sidebar-menu">
+        <ul>
+          <li class="header-menu">
+            <span>General</span>
+          </li>
+          <li>
+            <a href="?search-area=all" class="search" value="all">
+              <i class="fa fa-tasks"></i>
+              <span class="badge badge-pill badge-info">{{all_count}}</span>
+              <span>All tasks</span>
+            </a>
+          </li>
+          <li>
+            <a href="?search-area=primary" class="search" value="primary">
+              <i class="fa fa-calendar"></i>
+              <span>Primary tasks</span>
+              <span class="badge badge-pill badge-info">{{primary_count}}</span>
+            </a>
+          </li>
+          <li>
+            <a href="?search-area=complete" class="search" value="complete">
+              <i class="fa fa-clipboard"></i>
+              <span>Complete tasks</span>
+              <span class="badge badge-pill badge-info">{{complete_count}}</span>
+            </a>
+          </li>
+          
+
+          <li class="header-menu">
+            <a href="{% url 'base:category-create'%}" class="newcategory js-load-form">
+              <span >Categories</span>
+              <i class="fa fa-plus"></i>
+            </a>
+          </li>
+          <li>
+            <a href="?category=all">
+              <i class="fab fa-elementor"></i>
+              <span>All</span>
+            </a>
+          </li>
+          {% for category in categories %}
+          <li>
+            <a href="?category={{ category.name }}">
+              <i class="fab fa-elementor"></i>
+              <span>{{ category.name }}</span>
+            </a>
+          </li>
+          {% endfor %}
+
+        </ul>
+      </div>
+      <!-- END sidebar-menu -->
+    </div>
+    <!-- END sidebar-content  -->
+  
+    <!-- sidebar-footer  -->
+    <div class="sidebar-footer">
+      <a href="#">
+        <i class="fa fa-power-off mr-1">  </i>
+        <span > Logout</span>
+      </a>
+
+      <a href="{% url 'base:task-create' %}" class="js-load-form">
+        <i class="fa fa-plus mr-1"></i>
+        <span > new task</span>
+      </a>
+    </div>
+    <!-- END sidebar-footer data-toggle="modal" data-target="#taskModal"-->
+  </nav>

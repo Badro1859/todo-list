@@ -1,0 +1,42 @@
+{% load custom_tag %}
+
+
+{% regroup tasks by category as category_list %}
+
+{% for category in category_list %}
+{% if category.grouper %}
+<h4>{{category.grouper}}</h4>
+<hr>
+{% endif %}
+{% for task in category.list %}
+<div class="card pr-2 my-1 mx-3" style="width: 98%; height: 80px;">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-10 js-load-form" href="{% get_url 'update' task %}">
+        <h6 class="card-title">{{ task.title }} <small class="date" >{{ task.create }}</small></h6>
+        <p class="card-text">{{ task.description }}</p>
+      </div>
+      <div class="col-2 ">
+        <div class="row  pt-2">
+          <div class="col-6">
+              <a href="{% get_url 'update' task %}" class="js-complete-form">
+                <i id="finishedToastBtn" class="fas fa-circle-check fa-xl {% if task.complete %} finished {% else %} notFinished {% endif %}"></i>
+              </a>
+          </div>
+          <div class="col-6">
+              <a class="js-load-form" href="{% get_url 'delete' task %}">
+                <i id="deleteToastBtn" class="fas fa-trash fa-xl"></i>
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% empty %}
+<p>Sorry, no Tasks in this list.</p>
+{% endfor %}
+<hr><br>
+{% empty %}
+<p>Sorry, no Tasks in this list.</p>
+{% endfor %}
