@@ -1,6 +1,4 @@
-import datetime
-from multiprocessing import context
-from operator import truediv
+
 from typing import Any
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect
@@ -13,8 +11,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from base.forms import CategoryForm
-
+from .forms import TaskForm
 from .models import Category, Task
 
 
@@ -86,20 +83,17 @@ class TaskList(LoginRequiredMixin, ListView):
         return super().get(request, *args, **kwargs)
 
 
-class TaskDetail(LoginRequiredMixin, DetailView):
-    pass
-
-
 class TaskCreate(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ['title', 'description', 'date', 'primary', 'category']
+    # fields = ['title', 'description', 'date', 'primary', 'category']
+    form_class = TaskForm
     success_url = reverse_lazy('base:tasks')
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         if is_ajax:
             context = dict()
-            context['fct'] = 'js-update-form'
+            context['form'] = self.get_form()
             context['categories'] = Category.objects.filter(user=request.user)
             data = {"html_form": render_to_string(
                 'base/partials/task_form_partial.html', context, self.request)}
@@ -115,8 +109,9 @@ class TaskCreate(LoginRequiredMixin, CreateView):
 class TaskUpdate(LoginRequiredMixin, UpdateView):
 
     model = Task
-    fields = ['title', 'description', 'date',
-              'primary', 'category', 'complete']
+    # fields = ['title', 'description', 'date',
+    #           'primary', 'category', 'complete']
+    form_class = TaskForm
     success_url = reverse_lazy('base:tasks')
 
     def dispatch(self, request, *args: Any, **kwargs) -> HttpResponseBadRequest:
@@ -128,7 +123,8 @@ class TaskUpdate(LoginRequiredMixin, UpdateView):
 
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         if is_ajax:
-            context = {"object": self.get_object()}
+            self.object = self.get_object()
+            context = self.get_context_data()
 
             if request.GET.get('complete'):
 
@@ -157,10 +153,6 @@ class TaskUpdate(LoginRequiredMixin, UpdateView):
             return JsonResponse(data)
 
         return redirect('base:tasks')
-
-    def post(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
-        print("hello i am post fct")
-        return super().post(request, *args, **kwargs)
 
 
 class TaskDelete(LoginRequiredMixin, DeleteView):
