@@ -1,9 +1,25 @@
 from django.test import TestCase
-
+from django.core import mail
 from django.contrib.auth import get_user_model
+
+from user.utils import send_activation_email
 
 
 class UserAccountTests(TestCase):
+
+    def test_send_email(self):
+        db = get_user_model()
+        user = db.objects.create_user(
+            'test@gmail.com', 'username', 'firstname', 'password'
+        )
+
+        send_activation_email(user, None)
+
+        # Test that one message has been sent.
+        self.assertEqual(len(mail.outbox), 1)
+
+        # Verify that the subject of the first message is correct.
+        self.assertEqual(mail.outbox[0].subject, 'Activate your account')
 
     def test_new_superuser(self):
         db = get_user_model()
@@ -39,7 +55,7 @@ class UserAccountTests(TestCase):
         self.assertEqual(user.first_name, 'firstname')
 
         self.assertFalse(user.is_superuser)
-        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_email_verified)
         self.assertFalse(user.is_active)
 
         self.assertEqual(str(user), "username")

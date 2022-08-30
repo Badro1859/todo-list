@@ -1,9 +1,16 @@
+from xml.dom import ValidationErr
 from django import forms
 
-from django.contrib.auth import password_validation
+from django.contrib.auth import password_validation, get_user_model, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
+from django.utils.text import capfirst
 from .models import CustomUser
+
+UserModel = get_user_model()
+
 
 class UserCreationForm(forms.ModelForm):
     """
@@ -64,7 +71,19 @@ class UserCreationForm(forms.ModelForm):
 
         user.set_password(self.cleaned_data["password1"])
         user.is_active = True
-        
+
         if commit:
             user.save()
         return user
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+
+        if not user.is_email_verified:
+            raise ValidationError(
+                _("your email is not verified!!"),
+                code="emailVerified",
+            )
